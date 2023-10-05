@@ -1,0 +1,20 @@
+{
+  "name": "intro",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "note": "./index.js"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jest": "^29.7.0",
+    "open": "^9.1.0",
+    "yargs": "^17.7.2"
+  }
+}

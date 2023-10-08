@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  user_id  String   @id @default(uuid())
+  username String   @unique @db.VarChar(20)
+  password String
+  role     String
+  orders   orders[]
+}
+
+model product {
+  product_id        String        @id @default(uuid())
+  product_name      String        @unique @db.VarChar(20)
+  price             Decimal
+  belongsToCategory category      @relation(fields: [category_id], references: [category_id])
+  category_id       String
+  order_items       order_items[]
+}
+
+model category {
+  category_id   String    @id @default(uuid())
+  category_name String    @unique @db.VarChar(20)
+  product       product[]
+}
+
+enum UPDATE_STATUS {
+  Processing
+  Shipped
+  Delivered
+  Canceled
+  Pending_Payment
+  Complete
+}
+
+model orders {
+  order_id      String        @id @default(uuid())
+  belongsToUser user          @relation(fields: [user_id], references: [user_id])
+  user_id       String
+  order_date    DateTime      @default(now())
+  status        UPDATE_STATUS @default(Pending_Payment)
+  order_items   order_items[]
+}
+
+model order_items {
+  order_item_id     String  @id @default(uuid())
+  belongsToOrder    orders  @relation(fields: [order_id], references: [order_id])
+  order_id          String
+  belongsToProduct  product @relation(fields: [product_id], references: [product_id])
+  product_id        String
+  quantity          Int
+  price_of_purchase Decimal
+}

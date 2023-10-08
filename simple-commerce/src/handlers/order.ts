@@ -48,4 +48,5 @@ export const getOrders = async (req,res) => {
             order_items:true
         }
     })
+    res.json({message:getAllOrders})
 }

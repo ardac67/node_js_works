@@ -22,4 +22,23 @@ app.post('/signin',body(['username','password']).isString().notEmpty(),handleInp
 
 app.use('/api',protect,router)
 
+app.use((err,req,res,next) => {
+    switch(err.type) {
+        case 'auth':
+          res.status(401)
+          res.json({message:"unauthorized"})
+          break;
+        case 'input':
+          res.status(401)
+          res.json({message:"bad req"})
+          break;
+        default:
+        {
+            res.status(500)
+            res.json({message:"sorry my fault"})
+        }
+          
+      }
+})
+
 export default app

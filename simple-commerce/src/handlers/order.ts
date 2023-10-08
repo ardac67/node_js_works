@@ -1,5 +1,4 @@
 import prisma from "../db";
-
 export const createOrder = async (req, res) => {
     try {
       await prisma.$transaction(async (tx) => {
@@ -31,22 +30,26 @@ export const createOrder = async (req, res) => {
         res.json({ header: header, line: allLines });
       });
     } catch (error) {
-      // Handle any errors that occur during the transaction
-      console.error(error);
       res.status(500).json({ error: 'Internal server error' });
     } finally {
       await prisma.$disconnect();
     }
   };
 
-export const getOrders = async (req,res) => {
-    const getAllOrders = await prisma.orders.findMany({
-        where:{
-            order_id:req.params.filter
-        },
-        include:{
-            order_items:true
-        }
-    })
-    res.json({message:getAllOrders})
+export const getOrders = async (req,res,next) => {
+    try{
+        const getAllOrders = await prisma.orders.findMany({
+            where:{
+                order_id:req.params.filter
+            },
+            include:{
+                order_items:true
+            }
+        })
+        res.json({message:getAllOrders})
+    }
+    catch(e){
+        e.type='input'
+        next(e)
+    }
 }

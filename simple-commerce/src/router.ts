@@ -2,6 +2,8 @@ import {Router} from 'express'
 import { createCategory, getAllCategories, getCategoryId } from './handlers/category';
 import { createProduct, getAllProducts, getProduct } from './handlers/product';
 import { createOrder } from './handlers/order';
+import { body } from 'express-validator';
+import { handleInputError, validation } from './modules/middlewares';
 
 const router=Router()
 
@@ -16,7 +18,7 @@ router.get('/getAllProducts',getAllProducts)
 router.get('/getProduct/:filter',getProduct)
 
 /*order routes*/
-router.post('/createOrder',createOrder)
+router.post('/createOrder',body(validation).isString().notEmpty(),handleInputError,createOrder)
 
 
 export default router;

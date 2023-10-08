@@ -38,3 +38,14 @@ export const createOrder = async (req, res) => {
       await prisma.$disconnect();
     }
   };
+
+export const getOrders = async (req,res) => {
+    const getAllOrders = await prisma.orders.findMany({
+        where:{
+            order_id:req.params.filter
+        },
+        include:{
+            order_items:true
+        }
+    })
+}

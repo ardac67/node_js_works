@@ -49,7 +49,23 @@ export const getOrders = async (req,res,next) => {
         res.json({message:getAllOrders})
     }
     catch(e){
-        e.type='input'
         next(e)
     }
+}
+
+export const updateOrders = async (req,res,next) => {
+  try{
+      const updateOne = await prisma.orders.update({
+          where:{
+              order_id:req.params.filter
+          },
+          data:{
+            status:req.body.status
+          }
+      })
+      res.json({message:updateOne})
+  }
+  catch(e){
+      next(e)
+  }
 }

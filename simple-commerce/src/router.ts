@@ -1,7 +1,7 @@
 import {Router} from 'express'
 import { createCategory, getAllCategories, getCategoryId } from './handlers/category';
 import { createProduct, getAllProducts, getProduct } from './handlers/product';
-import { createOrder,getOrders } from './handlers/order';
+import { createOrder,getOrders, updateOrders } from './handlers/order';
 import { body } from 'express-validator';
 import { handleInputError,  validationForOrderLine,  validationForOrders } from './modules/middlewares';
 
@@ -20,5 +20,10 @@ router.get('/getProduct/:filter',getProduct)
 /*order routes*/
 router.post('/createOrder',body(validationForOrders).notEmpty(),body('products').isArray(),body(validationForOrderLine).notEmpty(),handleInputError,createOrder)
 router.get('/getOrders/:filter',getOrders)
+router.put('/updateOne/:filter',updateOrders)
 
+router.use((err,req,res,next) => { 
+    res.status(401)
+    res.json({message:"bad req"})
+})
 export default router;

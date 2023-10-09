@@ -12,7 +12,7 @@ export const hashPassword = (password) => {
 export const createJWT = (user) => {
     const token = jwt.sign(
         {
-            id:user.id , username:user.username
+            id:user.id , username:user.username,role:user.role
         },
         process.env.JWT_SECRET
     );
@@ -30,7 +30,6 @@ export const protect = (req, res, next) => {
   
     const [, token] = bearer.split(" ");
     if (!token) {
-      console.log("here");
       res.status(401);
       res.send("Not authorized");
       return;

@@ -4,7 +4,7 @@ import { protect } from './modules/auth'
 import router from './router'
 import { createNewUser, signin } from './handlers/user'
 import { body } from 'express-validator'
-import { handleInputError } from './modules/middlewares'
+import { authorizeJWT, handleInputError } from './modules/middlewares'
 
 
 const app = express()
@@ -20,7 +20,7 @@ app.get('/',(req,res) => {
 app.post('/user',body(['username','password','role']).isString().notEmpty(),handleInputError,createNewUser)
 app.post('/signin',body(['username','password']).isString().notEmpty(),handleInputError,signin)
 
-app.use('/api',protect,router)
+app.use('/api',protect,authorizeJWT('admin'),router)
 
 
 
